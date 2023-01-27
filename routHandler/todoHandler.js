@@ -25,7 +25,6 @@ router.post('/', async (req, res) => {
 
     await newTodo.save((err) => {
         if (err) {
-            console.log(err);
             res.status(500).json({
                 error: 'There was a server side error!'
             })
@@ -41,7 +40,19 @@ router.post('/', async (req, res) => {
 
 // POST Multiple todo
 router.post('/all', async (req, res) => {
-    
+    await Todo.insertMany(req.body, (err) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({
+                error: 'There was a server side error!'
+            })
+        }
+        else {
+            res.status(200).json({
+                message: 'Todos were successfully updated'
+            })
+        }
+    })
 });
 
 
