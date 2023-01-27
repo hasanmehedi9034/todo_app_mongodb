@@ -33,6 +33,28 @@ router.get('/', async (req, res) => {
 })
 
 
+
+
+// show active status todos
+router.get('/active', async (req, res) => {
+    try {
+        const newTodos = new Todo();
+        const allActiveTodos = await newTodos.findActive();
+
+        res.status(200).json({
+            data: allActiveTodos
+        })
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: 'There was a server side error!!',
+        })
+    }
+})
+
+
+
 // GET a todo by ID
 router.get('/:id', async (req, res) => {
     try {
@@ -50,12 +72,13 @@ router.get('/:id', async (req, res) => {
         })
     }
     catch (err) {
-        res.status(200).json({
-            result: data,
+        res.status(500).json({
             error: 'server side error'
         })
     }
 })
+
+
 
 // POST a todo
 router.post('/', async (req, res) => {
