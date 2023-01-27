@@ -10,68 +10,104 @@ const Todo = new mongoose.model('Todo', todoSchema);
 
 // GET All the todos
 router.get('/', async (req, res) => {
-    await Todo.find({}, (err, data) => {
-        if (err) {
-            res.status(500).json({
-                error: 'There was a server side error!'
-            })
-        }
-        else {
-            res.status(200).json({
-                result: data,
-                message: 'Todos Get success'
-            })
-        }
-    })
-    .select({
-        _id: 0,
-        __v: 0,
-        date: 0
-    })
-    .limit(2)
-    .clone()
+    try {
+        const data = await Todo.find( {} )
+        .select({
+            _id: 0,
+            __v: 0,
+            date: 0
+        })
+        .clone();
+
+        res.status(200).json({
+            result: data,
+            message: 'Successfully data received'
+        })
+    }
+    catch (err) {
+        res.status(200).json({
+            result: data,
+            error: 'server side error'
+        })
+    }
+
+    // /Todo.find({}, (err, data) => {
+    //     if (err) {
+    //         res.status(500).json({
+    //             error: 'There was a server side error!'
+    //         })
+    //     }
+    //     else {
+    //         res.status(200).json({
+    //             result: data,
+    //             message: 'Todos Get success'
+    //         })
+    //     }
+    // })
+    // .select({
+    //     _id: 0,
+    //     __v: 0,
+    //     date: 0
+    // })
+    // .limit(2)
+    // .clone()
 })
 
 
 // GET a todo by ID
 router.get('/:id', async (req, res) => {
-    await Todo.find({_id: req.params.id}, (err, data) => {
-        if (err) {
-            res.status(500).json({
-                error: 'There was a server side error!'
-            })
-        }
-        else {
-            res.status(200).json({
-                result: data,
-                message: 'Todo Get success'
-            })
-        }
-    })
-    .select({
-        _id: 0,
-        __v: 0,
-        date: 0
-    })
-    .clone()
+    try {
+        const data = await Todo.find({ _id: req.params.id })
+        .select({
+            _id: 0,
+            __v: 0,
+            date: 0
+        })
+        .clone();
+
+        res.status(200).json({
+            result: data,
+            message: 'Successfully data received'
+        })
+    }
+    catch (err) {
+        res.status(200).json({
+            result: data,
+            error: 'server side error'
+        })
+    }
 })
 
 // POST a todo
 router.post('/', async (req, res) => {
-    const newTodo = new Todo(req.body);
+    try {
+        const newTodo = new Todo(req.body)
+        await newTodo.save();
 
-    await newTodo.save((err) => {
-        if (err) {
-            res.status(500).json({
-                error: 'There was a server side error!'
-            })
-        }
-        else {
-            res.status(200).json({
-                message: 'Todo was inserted successfully'
-            })
-        }
-    })
+        res.status(200).json({
+            message: 'Todo saved successfully'
+        })
+    }
+    catch (err) {
+        res.status(500).json({
+            error: 'There was a server side error!'
+        })
+    }
+
+
+    // const newTodo = new Todo(req.body);
+    // await newTodo.save((err) => {
+    //     if (err) {
+    //         res.status(500).json({
+    //             error: 'There was a server side error!'
+    //         })
+    //     }
+    //     else {
+    //         res.status(200).json({
+    //             message: 'Todo was inserted successfully'
+    //         })
+    //     }
+    // })
 })
 
 
