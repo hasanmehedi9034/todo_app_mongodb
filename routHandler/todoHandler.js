@@ -57,14 +57,20 @@ router.post('/all', async (req, res) => {
 
 // PUT todo
 router.put('/:id', async (req, res) => {
-    await Todo.updateOne({
+    const result = await Todo.findByIdAndUpdate(
+    {
         _id: req.params.id
-    }, {
+    }, 
+    {
         $set: {
-            status: 'inactive',
-            title: 'Mehedi Todo'
+            title: 'Peace Todo'
         }
-    }, (err) => {
+    }, 
+    {
+        useFindAndModify: false,
+        new: true
+    },
+    (err) => {
         if(err) {
             console.log(err)
             res.status(500).json({
@@ -77,6 +83,8 @@ router.put('/:id', async (req, res) => {
             })
         }
     }).clone();
+
+    console.log(result);
 })
 
 
