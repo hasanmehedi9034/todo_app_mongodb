@@ -42,7 +42,6 @@ router.post('/', async (req, res) => {
 router.post('/all', async (req, res) => {
     await Todo.insertMany(req.body, (err) => {
         if (err) {
-            console.log(err);
             res.status(500).json({
                 error: 'There was a server side error!'
             })
@@ -57,8 +56,27 @@ router.post('/all', async (req, res) => {
 
 
 // PUT todo
-router.put('/', async (req, res) => {
-
+router.put('/:id', async (req, res) => {
+    await Todo.updateOne({
+        _id: req.params.id
+    }, {
+        $set: {
+            status: 'inactive',
+            title: 'Mehedi Todo'
+        }
+    }, (err) => {
+        if(err) {
+            console.log(err)
+            res.status(500).json({
+                error: 'There was a server side error!'
+            })
+        }
+        else {
+            res.status(200).json({
+                message: 'Todo was updated successfully updated'
+            })
+        }
+    }).clone();
 })
 
 
