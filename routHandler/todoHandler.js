@@ -33,10 +33,15 @@ router.get('/', async (req, res) => {
 })
 
 
-
+router.get('/js', async (req, res) => {
+    const data = await Todo.findByJs();
+    res.status(200).json({
+        data: data
+    })
+})
 
 // show active status todos
-router.get('/active', async (req, res) => {
+router.get('/active-todos', async (req, res) => {
     try {
         const newTodos = new Todo();
         const allActiveTodos = await newTodos.findActive();
@@ -84,7 +89,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const newTodo = new Todo(req.body)
-        newTodo.save();
+        await newTodo.save();
 
         res.status(200).json({
             message: 'Todo saved successfully'
@@ -132,10 +137,10 @@ router.put('/:id', async (req, res) => {
                 new: true
             })
 
-            res.status(200).json({
-                message: 'Todo was updated successfully updated',
-                updatedData: data
-            })
+        res.status(200).json({
+            message: 'Todo was updated successfully updated',
+            updatedData: data
+        })
     }
     catch (err) {
         res.status(500).json({

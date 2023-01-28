@@ -24,12 +24,18 @@ const todoSchema = new mongoose.Schema({
 
 todoSchema.methods = {
     findActive: function() {
-        return mongoose.model('Todo').find( {status: 'inactive'} )
+        return mongoose.model('Todo').find( {status: 'active'} )
         .select({
             _id: 0,
             __v: 0,
             date: 0
         })
+    }
+}
+
+todoSchema.statics = {
+    findByJs: function() {
+        return this.find({ title: /js/i })
     }
 }
 
