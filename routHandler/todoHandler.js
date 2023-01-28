@@ -35,6 +35,16 @@ router.get('/', async (req, res) => {
 
 router.get('/js', async (req, res) => {
     const data = await Todo.findByJs();
+
+    res.status(200).json({
+        data: data
+    })
+})
+
+
+router.get('/language', async (req, res) => {
+    const data = await Todo.find().byLanguage('react');
+
     res.status(200).json({
         data: data
     })

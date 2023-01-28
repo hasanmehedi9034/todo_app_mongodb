@@ -22,6 +22,7 @@ const todoSchema = new mongoose.Schema({
 });
 
 
+// instance method
 todoSchema.methods = {
     findActive: function() {
         return mongoose.model('Todo').find( {status: 'active'} )
@@ -33,9 +34,26 @@ todoSchema.methods = {
     }
 }
 
+
+// instance method
 todoSchema.statics = {
     findByJs: function() {
         return this.find({ title: /js/i })
+    }
+}
+
+
+// quary helpers
+todoSchema.query = {
+    byLanguage: function(language) {
+        return this.find({ title: new RegExp(language, 'i') })
+        .select({
+            _id: 0,
+            __v: 0,
+            date: 0,
+            description: 0,
+            status: 0
+        });
     }
 }
 
