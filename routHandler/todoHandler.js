@@ -13,6 +13,7 @@ const Todo = new mongoose.model('Todo', todoSchema);
 router.get('/', checkLogin, async (req, res) => {
     try {
         const data = await Todo.find()
+        .populate('user', 'name username -_id')
         .select({
             _id: 0,
             __v: 0,
@@ -96,9 +97,12 @@ router.get('/:id', async (req, res) => {
 
 
 // POST a todo
-router.post('/', async (req, res) => {
+router.post('/', checkLogin, async (req, res) => {
     try {
-        const newTodo = new Todo(req.body)
+        const newTodo = new Todo({
+            ...req.body,
+            user: req.userId,
+        })
         await newTodo.save();
 
         res.status(200).json({
