@@ -28,7 +28,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/todos')
 
 
 // express error handling router
-function errorHandler(err, req, res, next) {
+const errorHandler = (err, req, res, next) => {
     if (res.headerSent) {
         return next(err);
     }
